@@ -1,7 +1,7 @@
 from django.utils import timezone
-
 from django.db import models
 from django.urls import reverse
+from simple_history.models import HistoricalRecords
 
 
 def one_week_hence():
@@ -10,6 +10,7 @@ def one_week_hence():
 
 class ToDoList(models.Model):
     title = models.CharField(max_length=100, unique=True)
+    history = HistoricalRecords()
 
     def get_absolute_url(self):
         return reverse("list", args=[self.id])
@@ -24,6 +25,7 @@ class ToDoItem(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(default=one_week_hence)
     todo_list = models.ForeignKey(ToDoList, on_delete=models.CASCADE)
+    history = HistoricalRecords()
 
     def get_absolute_url(self):
         return reverse(
